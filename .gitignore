@@ -1,11 +1,15 @@
+*~
 *.a
 *.marks
 *.dylib
+*.lo
 *.o
 *.pb.*
 *.pc
 *.pyc
 .tags*
+.deps
+.dirstamp
 .DS_Store
 /CMakeFiles/*
 /build*
