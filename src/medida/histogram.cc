@@ -13,6 +13,7 @@
 
 namespace medida {
 
+static const double kDefaultAlpha = 0.015;
 
 class Histogram::Impl {
  public:
@@ -31,7 +32,6 @@ class Histogram::Impl {
   void Clear();
  private:
   static const std::uint64_t kDefaultSampleSize = 1028;
-  static const std::uint64_t kDefaultAlpha = 0.015;
   std::unique_ptr<stats::Sample> sample_;
   std::atomic<std::int64_t> min_;
   std::atomic<std::int64_t> max_;
@@ -115,7 +115,7 @@ Histogram::Impl::Impl(SampleType sample_type) {
   } else if (sample_type == kBiased) {
     sample_ = std::unique_ptr<stats::Sample>(new stats::ExpDecaySample(kDefaultSampleSize, kDefaultAlpha));
   } else {
-    throw std::invalid_argument("invalid sample_type=" + sample_type);
+      throw std::invalid_argument("invalid sample_type");
   }
   Clear();
 }

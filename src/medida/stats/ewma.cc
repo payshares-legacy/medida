@@ -10,14 +10,14 @@
 namespace medida {
 namespace stats {
 
-static constexpr int kINTERVAL = 5;
-static constexpr double kSECONDS_PER_MINUTE = 60.0;
-static constexpr int kONE_MINUTE = 1;
-static constexpr int kFIVE_MINUTES = 5;
-static constexpr int kFIFTEEN_MINUTES = 15;
-static constexpr double kM1_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kONE_MINUTE);
-static constexpr double kM5_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIVE_MINUTES);
-static constexpr double kM15_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIFTEEN_MINUTES);
+static const int kINTERVAL = 5;
+static const double kSECONDS_PER_MINUTE = 60.0;
+static const int kONE_MINUTE = 1;
+static const int kFIVE_MINUTES = 5;
+static const int kFIFTEEN_MINUTES = 15;
+static const double kM1_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kONE_MINUTE);
+static const double kM5_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIVE_MINUTES);
+static const double kM15_ALPHA = 1 - std::exp(-kINTERVAL / kSECONDS_PER_MINUTE / kFIFTEEN_MINUTES);
 
 class EWMA::Impl {
  public:
@@ -32,7 +32,7 @@ class EWMA::Impl {
   volatile double rate_;
   std::atomic<std::int64_t> uncounted_;
   const double alpha_;
-  const std::uint64_t interval_nanos_;
+  const std::int64_t interval_nanos_;
 };
 
 

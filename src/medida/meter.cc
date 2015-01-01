@@ -29,7 +29,7 @@ class Meter::Impl {
   const std::chrono::nanoseconds rate_unit_;
   std::atomic<std::uint64_t> count_;
   const Clock::time_point start_time_;
-  std::atomic<std::uint64_t> last_tick_;
+  std::atomic<std::int64_t> last_tick_;
   stats::EWMA m1_rate_;
   stats::EWMA m5_rate_;
   stats::EWMA m15_rate_;

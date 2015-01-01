@@ -38,7 +38,7 @@ class Timer::Impl {
  private:
   Timer& self_;
   const std::chrono::nanoseconds duration_unit_;
-  const std::uint64_t duration_unit_nanos_;
+  const std::int64_t duration_unit_nanos_;
   const std::chrono::nanoseconds rate_unit_;
   Meter meter_;
   Histogram histogram_;
