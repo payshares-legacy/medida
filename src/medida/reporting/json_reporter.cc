@@ -76,7 +76,7 @@ void JsonReporter::Process(Timer& timer) {
 
 JsonReporter::Impl::Impl(JsonReporter& self, MetricsRegistry &registry)
     : self_     (self),
-      registry_ (registry_) {
+      registry_ (registry) {
 #ifdef _MSC_VER
 	char nameBuf[128];
 	if (gethostname(nameBuf, sizeof(nameBuf)) == 0)
