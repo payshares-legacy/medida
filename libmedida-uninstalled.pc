@@ -2,4 +2,4 @@ Name: libmedida
 Version: 0.1.0
 Description: Medida metrics library for C++
 Libs: -L${pcfiledir}/src/medida -lmedida
-Cflags: -I${pcfiledir}/src/medida
+Cflags: -I${pcfiledir}/src
