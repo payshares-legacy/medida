@@ -96,7 +96,7 @@ double Snapshot::get999thPercentile() const {
 
 
 Snapshot::Impl::Impl(const std::vector<double>& values)
-    : values_ {values} {
+    : values_ (values) {
   std::sort(std::begin(this->values_), std::end(this->values_));
 }
 
@@ -134,8 +134,8 @@ double Snapshot::Impl::getValue(double quantile) const {
     return values_.back();
   }
 
-  auto lower = values_[pos - 1];
-  auto upper = values_[pos];
+  double lower = values_[pos - 1];
+  double upper = values_[pos];
   return lower + (pos - std::floor(pos)) * (upper - lower);
 }
 

@@ -97,7 +97,7 @@ void UniformSample::Impl::Update(std::int64_t value) {
   if (count < size) {
     values_[count - 1] = value;
   } else {
-    std::uniform_int_distribution<> uniform(0, count - 1);
+    std::uniform_int_distribution<uint64_t> uniform(0, count - 1);
     std::lock_guard<std::mutex> lock {rng_mutex_}; // FIXME: Thread-local RNG?
     auto rand = uniform(rng_);
     if (rand < size) {

@@ -8,7 +8,11 @@
 #include <ctime>
 #include <mutex>
 #include <sstream>
+#ifdef _MSC_VER
+#include <Winsock2.h>
+#else
 #include <sys/utsname.h>
+#endif
 
 #include "medida/reporting/util.h"
 
@@ -73,8 +77,20 @@ void JsonReporter::Process(Timer& timer) {
 JsonReporter::Impl::Impl(JsonReporter& self, MetricsRegistry &registry)
     : self_     (self),
       registry_ (registry_) {
+#ifdef _MSC_VER
+	char nameBuf[128];
+	if (gethostname(nameBuf, sizeof(nameBuf)) == 0)
+	{
+		uname_ = std::string(nameBuf);
+	}
+	else
+	{
+		uname_ = std::string("localhost");
+	}
+#else
   utsname name;
   uname_ = {uname(&name) ? "localhost" : name.nodename};
+#endif
 }
 
 
@@ -134,6 +150,10 @@ void JsonReporter::Impl::Process(Meter& meter) {
 
 void JsonReporter::Impl::Process(Histogram& histogram) {
   auto snapshot = histogram.GetSnapshot();
+#ifdef _MSC_VER
+#undef min
+#undef max
+#endif
   out_ << "\"type\":\"histogram\"," << std::endl
        << "\"min\":" << histogram.min() << "," << std::endl
        << "\"max\":" << histogram.max() << "," << std::endl
