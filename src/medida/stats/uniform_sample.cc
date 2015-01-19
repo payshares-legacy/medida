@@ -24,9 +24,9 @@ class UniformSample::Impl {
  private:
   std::uint64_t reservoir_size_;
   std::atomic<std::uint64_t> count_;
-  std::vector<std::atomic<std::int64_t>> values_;
+  std::vector<std::int64_t> values_;
   mutable std::mt19937_64 rng_;
-  mutable std::mutex rng_mutex_;
+  mutable std::mutex mutex_;
 };
 
 
@@ -67,8 +67,8 @@ UniformSample::Impl::Impl(std::uint32_t reservoirSize)
       count_          {},
       values_         (reservoirSize), // FIXME: Explicit and non-uniform
       rng_            {std::random_device()()},
-      rng_mutex_      {} {
-  Clear();
+      mutex_          {} {
+    Clear();
 }
 
 
@@ -77,6 +77,7 @@ UniformSample::Impl::~Impl() {
 
 
 void UniformSample::Impl::Clear() {
+  std::lock_guard<std::mutex> lock {mutex_};
   for (auto& v : values_) {
     v = 0;
   }
@@ -93,12 +94,12 @@ std::uint64_t UniformSample::Impl::size() const {
 
 void UniformSample::Impl::Update(std::int64_t value) {
   auto count = ++count_;
+  std::lock_guard<std::mutex> lock {mutex_};
   auto size = values_.size();
   if (count < size) {
     values_[count - 1] = value;
   } else {
     std::uniform_int_distribution<uint64_t> uniform(0, count - 1);
-    std::lock_guard<std::mutex> lock {rng_mutex_}; // FIXME: Thread-local RNG?
     auto rand = uniform(rng_);
     if (rand < size) {
       values_[rand] = value;
@@ -110,6 +111,7 @@ void UniformSample::Impl::Update(std::int64_t value) {
 Snapshot UniformSample::Impl::MakeSnapshot() const {
   std::uint64_t size = values_.size();
   std::uint64_t count = count_.load();
+  std::lock_guard<std::mutex> lock {mutex_};
   auto begin = std::begin(values_);
   return Snapshot {{begin, begin + std::min(count, size)}};
 }
