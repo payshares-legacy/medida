@@ -22,7 +22,6 @@ class UniformSample::Impl {
   void Update(std::int64_t value);
   Snapshot MakeSnapshot() const;
  private:
-  std::uint64_t reservoir_size_;
   std::atomic<std::uint64_t> count_;
   std::vector<std::int64_t> values_;
   mutable std::mt19937_64 rng_;
@@ -63,8 +62,7 @@ Snapshot UniformSample::MakeSnapshot() const {
 
 
 UniformSample::Impl::Impl(std::uint32_t reservoirSize)
-    : reservoir_size_ {reservoirSize},
-      count_          {},
+    : count_          {},
       values_         (reservoirSize), // FIXME: Explicit and non-uniform
       rng_            {std::random_device()()},
       mutex_          {} {
