@@ -170,9 +170,17 @@ void JsonReporter::Impl::Process(Histogram& histogram) {
 
 void JsonReporter::Impl::Process(Timer& timer) {
   auto snapshot = timer.GetSnapshot();
-  auto unit = FormatRateUnit(timer.duration_unit());
+  auto rate_unit = FormatRateUnit(timer.rate_unit());
+  auto duration_unit = FormatRateUnit(timer.duration_unit());
   out_ << "\"type\":\"timer\"," << std::endl
-       << "\"unit\":\"" << unit << "\"," << std::endl
+       << "\"count\":" << timer.count() << "," << std::endl
+       << "\"event_type\":\"" << timer.event_type() << "\"," << std::endl
+       << "\"rate_unit\":\"" << rate_unit << "\"," << std::endl
+       << "\"mean_rate\":" << timer.mean_rate() << "," << std::endl
+       << "\"1_min_rate\":" << timer.one_minute_rate() << "," << std::endl
+       << "\"5_min_rate\":" << timer.five_minute_rate() << "," << std::endl
+       << "\"15_min_rate\":" << timer.fifteen_minute_rate() << "," << std::endl
+       << "\"duration_unit\":\"" << duration_unit << "\"," << std::endl
        << "\"min\":" << timer.min() << "," << std::endl
        << "\"max\":" << timer.max() << "," << std::endl
        << "\"mean\":" << timer.mean() << "," << std::endl
