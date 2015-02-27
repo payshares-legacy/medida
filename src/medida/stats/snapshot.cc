@@ -41,53 +41,71 @@ Snapshot::Snapshot(const std::vector<double>& values)
   : impl_ {new Snapshot::Impl {values}} {
 }
 
-
-Snapshot::~Snapshot() {
-  delete impl_;  // FIXME: Why std::unique_ptr bork?
+Snapshot::Snapshot(Snapshot&& other)
+    : impl_ {std::move(other.impl_)} {
 }
 
+Snapshot::~Snapshot() {
+}
+
+void Snapshot::checkImpl() const
+{
+  if (!impl_)
+  {
+    throw std::runtime_error("Access to moved Snapshot::impl_");
+  }
+}
 
 std::size_t Snapshot::size() const {
+  checkImpl();
   return impl_->size();
 }
 
 
 std::vector<double> Snapshot::getValues() const {
+  checkImpl();
   return impl_->getValues();
 }
 
 
 double Snapshot::getValue(double quantile) const {
+  checkImpl();
   return impl_->getValue(quantile);
 }
 
 
 double Snapshot::getMedian() const {
+  checkImpl();
   return impl_->getMedian();
 }
 
 
 double Snapshot::get75thPercentile() const {
+  checkImpl();
   return impl_->get75thPercentile();
 }
 
 
 double Snapshot::get95thPercentile() const {
+  checkImpl();
   return impl_->get95thPercentile();
 }
 
 
 double Snapshot::get98thPercentile() const {
+  checkImpl();
   return impl_->get98thPercentile();
 }
 
 
 double Snapshot::get99thPercentile() const {
+  checkImpl();
   return impl_->get99thPercentile();
 }
 
 
 double Snapshot::get999thPercentile() const {
+  checkImpl();
   return impl_->get999thPercentile();
 }
 

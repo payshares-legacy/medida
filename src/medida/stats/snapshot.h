@@ -15,6 +15,9 @@ class Snapshot {
  public:
   Snapshot(const std::vector<double>& values);
   ~Snapshot();
+  Snapshot(Snapshot const&) = delete;
+  Snapshot& operator=(Snapshot const&) = delete;
+  Snapshot(Snapshot&&);
   std::size_t size() const;
   double getValue(double quantile) const;
   double getMedian() const;
@@ -26,8 +29,8 @@ class Snapshot {
   std::vector<double> getValues() const;
  private:
   class Impl;
-  Impl* impl_;
-  // std::unique_ptr<Impl> impl_;  // FIXME: y u incomplete type?!?
+  void checkImpl() const;
+  std::unique_ptr<Impl> impl_;
 };
 
 

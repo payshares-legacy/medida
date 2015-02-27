@@ -34,17 +34,23 @@ TimerContext::TimerContext(Timer& timer)
 TimerContext::~TimerContext() {
 }
 
+void TimerContext::checkImpl() const
+{
+  if (!impl_)
+  {
+    throw std::runtime_error("Access to moved TimerContext::impl_");
+  }
+}
 
 void TimerContext::Reset() {
-    if (impl_)
-        impl_->Reset();
+  checkImpl();
+  impl_->Reset();
 }
 
 
 std::chrono::nanoseconds TimerContext::Stop() {
-    if (impl_)
-        return impl_->Stop();
-    return std::chrono::nanoseconds(0);
+  checkImpl();
+  return std::chrono::nanoseconds(0);
 }
 
 
