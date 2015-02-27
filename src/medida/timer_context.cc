@@ -22,23 +22,29 @@ class TimerContext::Impl {
 };
 
 
+TimerContext::TimerContext(TimerContext&& timer)
+    : impl_ {std::move(timer.impl_)} {
+}
+
 TimerContext::TimerContext(Timer& timer)
     : impl_ {new TimerContext::Impl {timer}} {
 }
 
 
 TimerContext::~TimerContext() {
-  delete impl_;  // FIXME: Why std::unique_ptr bork?
 }
 
 
 void TimerContext::Reset() {
-  impl_->Reset();
+    if (impl_)
+        impl_->Reset();
 }
 
 
 std::chrono::nanoseconds TimerContext::Stop() {
-  return impl_->Stop();
+    if (impl_)
+        return impl_->Stop();
+    return std::chrono::nanoseconds(0);
 }
 
 

@@ -15,13 +15,15 @@ class Timer;
 class TimerContext {
  public:
   TimerContext(Timer& timer);
+  TimerContext(TimerContext &&);
+  TimerContext(TimerContext const&) = delete;
+  TimerContext const& operator=(TimerContext const&) = delete;
   ~TimerContext();
   void Reset();
   std::chrono::nanoseconds Stop();
  private:
   class Impl;
-  Impl* impl_;
-  // std::unique_ptr<Impl> impl_;  // FIXME: y u incomplete type?!?
+  std::unique_ptr<Impl> impl_;
 };
 
 } // namespace medida
