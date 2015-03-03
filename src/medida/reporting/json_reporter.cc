@@ -101,7 +101,18 @@ JsonReporter::Impl::~Impl() {
 std::string JsonReporter::Impl::Report() {
   auto t = std::time(NULL);
   char mbstr[32] = "";
-  std::strftime(mbstr, 32, "%FT%T%z", std::localtime(&t));
+
+  std::tm tm;
+#ifdef _WIN32
+    // On Win32 this is returns a thread-local and there's no _r variant.
+    std::tm *tmPtr = gmtime(&t);
+    tm = *tmPtr;
+#else
+    // On unix the _r variant uses a local output, so is threadsafe.
+    gmtime_r(&t, &tm);
+#endif
+
+  std::strftime(mbstr, 32, "%FT%TZ", &tm);
   std::lock_guard<std::mutex> lock {mutex_};
   out_.str("");
   out_.clear();
