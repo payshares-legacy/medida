@@ -50,7 +50,7 @@ void TimerContext::Reset() {
 
 std::chrono::nanoseconds TimerContext::Stop() {
   checkImpl();
-  return std::chrono::nanoseconds(0);
+  return impl_->Stop();
 }
 
 
