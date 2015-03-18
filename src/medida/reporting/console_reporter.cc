@@ -123,8 +123,14 @@ void ConsoleReporter::Impl::Process(Histogram& histogram) {
 
 void ConsoleReporter::Impl::Process(Timer& timer) {
   auto snapshot = timer.GetSnapshot();
+  auto event_type = timer.event_type();
   auto unit = FormatRateUnit(timer.duration_unit());
-  out_ << "             min = " << timer.min() << unit << std::endl
+  out_ << "           count = " << timer.count() << std::endl
+       << "       mean rate = " << timer.mean_rate() << " " << event_type << "/" << unit << std::endl
+       << "   1-minute rate = " << timer.one_minute_rate() << " " << event_type << "/" << unit << std::endl
+       << "   5-minute rate = " << timer.five_minute_rate() << " " << event_type << "/" << unit << std::endl
+       << "  15-minute rate = " << timer.fifteen_minute_rate() << " " << event_type << "/" << unit << std::endl
+       << "             min = " << timer.min() << unit << std::endl
        << "             max = " << timer.max() << unit << std::endl
        << "            mean = " << timer.mean() << unit << std::endl
        << "          stddev = " << timer.std_dev() << unit << std::endl
